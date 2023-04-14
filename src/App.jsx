@@ -13,7 +13,7 @@ function App() {
   let timer
 
   const handleSearch = e => {
-    const newQuery = e.target.value
+    const newQuery = e.target.value.toLowerCase()
     const searchData = data.launches.filter(
       item =>
         item.mission_name.toLowerCase().includes(newQuery) ||
