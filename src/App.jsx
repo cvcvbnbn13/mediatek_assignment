@@ -8,9 +8,14 @@ function App() {
   const { data, loading, error } = useQuery(res)
   const [tableData, setTableData] = useState([])
 
-  console.log(tableData)
-
   let timer
+
+  const debounceInput = (action, params) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      action(params)
+    }, 1000)
+  }
 
   const handleSearch = e => {
     const newQuery = e.target.value.toLowerCase()
@@ -18,13 +23,17 @@ function App() {
       item =>
         item.mission_name.toLowerCase().includes(newQuery) ||
         item.rocket.rocket_name.toLowerCase().includes(newQuery) ||
-        item.rocket.rocket_type.toLowerCase().includes(newQuery) ||
-        item.launch_date_local.split('T')[0].includes(newQuery)
+        item.rocket.rocket_type.toLowerCase().includes(newQuery)
     )
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      setTableData(searchData)
-    }, 1000)
+    debounceInput(setTableData, searchData)
+  }
+
+  const handleSearchDate = e => {
+    const newQuery = e.target.value.toLowerCase()
+    const searchData = data.launches.filter(item =>
+      item.launch_date_local.split('T')[0].includes(newQuery)
+    )
+    debounceInput(setTableData, searchData)
   }
 
   const columns = useMemo(
@@ -70,7 +79,7 @@ function App() {
           <LaunchesTable
             data={tableData}
             columns={columns}
-            handleSearch={handleSearch}
+            handleSearchMethods={{ handleSearch, handleSearchDate }}
           />
         </React.Fragment>
       )}

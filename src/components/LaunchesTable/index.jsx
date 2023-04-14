@@ -2,7 +2,7 @@ import React from 'react'
 import { useTable, useSortBy, usePagination } from 'react-table'
 import './styles.css'
 
-const LaunchesTable = ({ data, columns, handleSearch }) => {
+const LaunchesTable = ({ data, columns, handleSearchMethods }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -113,7 +113,7 @@ const LaunchesTable = ({ data, columns, handleSearch }) => {
             type="text"
             placeholder="name/type"
             onChange={e => {
-              handleSearch(e)
+              handleSearchMethods.handleSearch(e)
             }}
           />
           <span>{'  '}</span>
@@ -121,7 +121,7 @@ const LaunchesTable = ({ data, columns, handleSearch }) => {
           <input
             type="month"
             onChange={e => {
-              handleSearch(e)
+              handleSearchMethods.handleSearchDate(e)
             }}
           />
         </div>
